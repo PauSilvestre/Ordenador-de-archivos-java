@@ -30,9 +30,7 @@ public class Main {
                 for (Path cosa : Files.walk(Path.of(rutaCarpeta)).toList()) {
                     if (Files.isRegularFile(cosa)){
                         try {
-
                             FileTime fechahora = Files.getLastModifiedTime(cosa);
-
 
                             String anyo = fechahora.toString().substring(0,4);
                             String mes = fechahora.toString().substring(5,7);
@@ -76,12 +74,14 @@ public class Main {
                             Path ruta = Path.of(fecha);
 
                             for (Path archivosOrdenado : Files.walk(ruta).toList()) {
-                                if (Files.mismatch(cosa, archivosOrdenado) == -1){ //archivoOrdenado.getFileName().equals(cosa.getFileName())
-                                    try {
-                                    Files.delete(cosa); //esto no va, preguntar porque
-                                    System.out.println("Archivo " + cosa + " eliminado");
-                                    } catch (Exception e) {
-                                        System.out.println("error");
+                                if (Files.isRegularFile(archivosOrdenado)){
+                                try {
+                                    if (archivosOrdenado.getFileName().equals(cosa.getFileName()) && Files.size(archivosOrdenado) == Files.size(cosa)){
+                                            Files.delete(cosa); //esto no va, preguntar porque
+                                            System.out.println("Archivo " + cosa + " eliminado");
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("error");
                                     }
                                 }
                             }
